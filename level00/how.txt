@@ -1,0 +1,18 @@
+# First, i started by looking at all the files I could. But it was taking too long.. Then, i realized I only needed the files belonging to user flag00. For that, I will use the 'find' command: 
+
+find / -user flag00 2>/dev/null
+
+# This command will return all the files belonging to flag00 starting from the path '/'. I am using 2>/dev/null in order to redirect error output.
+
+/usr/sbin/john
+/rofs/usr/sbin/john
+
+# When i cat these files they return: 
+
+cdiiddwpgswtgt
+
+# First, i tried that as a password but it didn't work. So i uses dcode.fr to try some rot and found this :
+
+nottoohardhere
+
+# This is the password.
