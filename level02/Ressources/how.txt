@@ -1,0 +1,23 @@
+# In the level02 folder there is a .pcap file. So I downloaded Wireshark to read it: 
+
+$> sudo apt install wireshark
+$> sudo usermod -aG wireshark user42
+
+# I opened level02.pcap with wireshark and I checked all lines. I found one where 'Pas sword' was written. Right click -> follow -> fluxTcp it returns this:
+
+..%..%..&..... ..#..'..$..&..... ..#..'..$.. .....#.....'........... .38400,38400....#.SodaCan:0....'..DISPLAY.SodaCan:0......xterm.........."........!........"..".....b........b....	B.
+..............................1.......!.."......"......!..........."........"..".............	..
+.....................
+Linux 2.6.38-8-generic-pae (::ffff:10.1.1.2) (pts/10)
+
+..wwwbugs login: l.le.ev.ve.el.lX.X
+..
+Password: ft_wandr...NDRel.L0L
+.
+..
+Login incorrect
+wwwbugs login:
+
+# I tried 'ft_wandr...NDRel.L0L' but that was not the password. Then, i tried with spaces: 'ft_wandr   NDRel L0L', not the password.. I tried with deletes: 'ft_waNDReL0L'. That works !
+
+
