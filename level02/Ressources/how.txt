@@ -1,7 +1,8 @@
-# In the level02 folder there is a .pcap file. So I downloaded Wireshark to read it: 
+# In the level02 folder there is a .pcap file. So I downloaded Wireshark to read it, at school I needed to install a vm too: 
 
 $> sudo apt install wireshark
 $> sudo usermod -aG wireshark user42
+$> scp -P 4242 level02@192.168.1.92:/home//user/level02/level02.pcap .
 
 # I opened level02.pcap with wireshark and I checked all lines. I found one where 'Pas sword' was written. Right click -> follow -> fluxTcp it returns this:
 
