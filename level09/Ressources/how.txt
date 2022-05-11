@@ -1,0 +1,34 @@
+# At this level we got an executable and a file named 'token':
+
+$> cat token 
+f4kmm6p|=�p�n��DB�Du{��
+
+$> ./level09
+You need to provied only one arg.
+
+$> ./level09 token
+tpmhr
+
+# It looks like a rot, let's do some tests:
+
+$> ./level09 aaaaaaaa
+abcdefgh
+
+# The rotation value is the char position in the array, we need to reverse it, but we have non-printable characters. I am using hexdump to get hex value of each char: 
+
+$> hexdump -C token
+00000000  66 34 6b 6d 6d 36 70 7c  3d 82 7f 70 82 6e 83 82  |f4kmm6p|=..p.n..|
+00000010  44 42 83 44 75 7b 7f 8c  89 0a                    |DB.Du{....|
+0000001a
+
+# Now I can do a little reverse program : reverse.c
+
+$> gcc reverse.c; ./a.out 
+f3iji1ju5yuevaus41q1afiuq
+
+$> su flag09
+password: f3iji1ju5yuevaus41q1afiuq
+Don't forget to launch getflag !
+
+$> getflag
+s5cAJpM8ev6XHw998pRWG728z
