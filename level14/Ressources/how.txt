@@ -1,0 +1,57 @@
+# At this level we have to hack getflag:
+
+$> ltrace /bin/getflag
+__libc_start_main(0x8048946, 1, 0xbffff7e4, 0x8048ed0, 0x8048f40 <unfinished ...>
+ptrace(0, 0, 1, 0, 0)                                                             = -1
+puts("You should not reverse this"You should not reverse this
+)                                               = 28
++++ exited (status 1) +++
+
+# There is an anti-reverse protection, ptrace is a syscall used to debug executables, it can be only be called once simultaneously. It will return 0 if it is the only one launched, -1 otherwise. gdb uses it so it will returns -1. So I need to change its return value:
+
+$> gdb /bin/getflag
+
+(gdb) disass main
+[...]
+ 0x08048989 <+67>:	call   0x8048540 <ptrace@plt>
+ 0x0804898e <+72>:	test   %eax,%eax
+[...]
+ 0x08048afd <+439>:	call   0x80484b0 <getuid@plt>
+ 0x08048b02 <+444>:	mov    %eax,0x18(%esp)
+ 0x08048b06 <+448>:	mov    0x18(%esp),%eax
+ 0x08048b0a <+452>:	cmp    $0xbbe,%eax
+[...]
+
+# ptrace is called, then test instruction will check if $eax == 0.
+
+(gdb) b * 0x0804898e
+
+(gdb) b * 0x08048b0a
+
+(gdb) layout asm
+
+(gdb) r
+Starting program: /bin/getflag 
+
+Breakpoint 1, 0x0804898e in main ()
+
+(gdb) set $eax=0
+
+# Now that I can pass through the ptrace, I need to change the return value of getuid()
+
+(gdb) n
+
+(gdb) set $eax=0xbbe
+
+(gdb) n
+net $eax=0xbbe
+Single stepping until exit from function main,
+0xb7e454d3 in __libc_start_main () from /lib/i386-linux-gnu/libc.so.6
+(gdb) flag.Here is your token : wiok45aaoguiboiki2tuin6ub
+
+
+
+
+
+
+
